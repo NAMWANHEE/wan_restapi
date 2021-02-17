@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <ul>
+        {% for i in device_name %}
+        <li><a href ='{% url "api:bb" i.device_name i.id %}'>{{i}}</a></li>
+        {% endfor %}
+
+    </ul>
+    <a href = '{% url "api:datalist1" %}'><h3>api</h3></a>
+</body>
+</html>
