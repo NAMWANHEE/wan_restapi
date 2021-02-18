@@ -3,7 +3,7 @@ from django.urls import path,include
 from . import views
 app_name = 'api'
 urlpatterns = [
-    path('',views.choice,name='choice'),
+    #path('',views.choice,name='choice'),
     path('api/v2/',views.Datalist.as_view(),name='datalist'),
     #path('api/v2/<int:pk>/',views.Data.as_view()),
     path('api/v3/',views.DeviceData.as_view(),name='device_data'),

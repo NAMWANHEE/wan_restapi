@@ -22,8 +22,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 
 
-def choice(request):
-    return render(request,'wan/choice.html')
+# def choice(request):
+#     return render(request,'wan/choice.html')
 
 class Datalist(APIView): #전체 장치 조회
 
@@ -39,17 +39,17 @@ class Datalist(APIView): #전체 장치 조회
         a.delete()
         b = Dn.objects.all()
         b.delete()
-        c = request.GET['api_key']
-        d = request.GET['api_secret']
+        # c = request.GET['api_key']
+        # d = request.GET['api_secret']
         # print(c,d)
-        # api_key = request.GET.get('api_key')
-        # api_secret = request.GET.get('api_secret')
+        api_key = request.GET.get('api_key')
+        api_secret = request.GET.get('api_secret')
         # kind = request.GET('category',None)
         url = 'https://oa.tapaculo365.com/tp365/v1/channel/get_lst'
         params = {
             'search': '',
-            'api_key': c,  # 4528458
-            'api_secret': d  # '3fa6d40e4461cd250a683b86eed42bad'
+            'api_key': api_key,  # 4528458
+            'api_secret': api_secret  # '3fa6d40e4461cd250a683b86eed42bad'
         }
         r = requests.get(url, params=params)
         c = r.json()['rows']
@@ -76,22 +76,22 @@ class Datalist(APIView): #전체 장치 조회
 class DeviceData(APIView): # 원하는 장치의 이름이 포함된 데이터중 첫번째 장치맥,센서맥으로 장치의 24시간 데이터조회
 
     def get(self, request, format=None):
-        # a = request.GET.get('name')
-        # api_key = request.GET.get('api_key')
-        # api_secret = request.GET.get('api_secret')
-        c = request.GET['api_key']
-        d = request.GET['api_secret']
-        e = request.GET['device']
+        a = request.GET.get('name')
+        api_key = request.GET.get('api_key')
+        api_secret = request.GET.get('api_secret')
+        # c = request.GET['api_key']
+        # d = request.GET['api_secret']
+        # e = request.GET['device']
         # print(e)
 
-        device_mac = Dn.objects.filter(device_name__contains=e)[0].device_mac
-        sensor_mac = Dn.objects.filter(device_name__contains=e)[0].sensor_mac
+        device_mac = Dn.objects.filter(device_name__contains=a)[0].device_mac
+        sensor_mac = Dn.objects.filter(device_name__contains=a)[0].sensor_mac
         url2 = 'https://oa.tapaculo365.com/tp365/v1/channel/get_recentdata'
         params2 = {
             'device_mac': device_mac,
             'sensor_mac': sensor_mac,
-            'api_key': c,
-            'api_secret': d
+            'api_key': api_key,
+            'api_secret': api_secret
         }
         r2 = requests.get(url2, params=params2)
         data = r2.json()
@@ -109,7 +109,7 @@ class DeviceData(APIView): # 원하는 장치의 이름이 포함된 데이터�
             times = parse_datetime(df.timestamp[i])
             a1 = We(time=times, temp=df.ch1[i], id=i + 1)
             a1.save()
-        a2 = hos(device_name=Dn.objects.filter(device_name__contains=e)[0].device_name,max_temp=df.ch1.max(),min_temp=df.ch1.min(),mean_temp=df.ch1.mean())
+        a2 = hos(device_name=Dn.objects.filter(device_name__contains=a)[0].device_name,max_temp=df.ch1.max(),min_temp=df.ch1.min(),mean_temp=df.ch1.mean())
         a2.save()
 
         device_data = We.objects.all()
